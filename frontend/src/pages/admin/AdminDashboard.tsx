@@ -108,7 +108,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* 6 Top Metric Cards */}
-      <div style={{
+      <div className="admin-metrics-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
         gap: 10
@@ -253,7 +253,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Analytics Charts Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 12 }}>
+      <div className="admin-charts-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: 12 }}>
         {/* Monthly Submission & Settlement Bar Chart */}
         <div className="app-card" style={{ padding: '14px 18px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
@@ -327,7 +327,7 @@ export const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Quick Access Modules */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
+      <div className="admin-quick-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
         <div
           onClick={() => navigate('/admin/customers')}
           className="app-card"
@@ -462,6 +462,26 @@ export const AdminDashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Responsive overrides */}
+      <style>{`
+        @media (max-width: 768px) {
+          .admin-charts-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .admin-quick-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .admin-metrics-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .admin-quick-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

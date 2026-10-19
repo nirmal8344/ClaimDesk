@@ -125,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, unreadCount, on
           }}
         />
 
-        <form onSubmit={handleSearchSubmit} style={{ width: '100%', position: 'relative' }}>
+        <form onSubmit={handleSearchSubmit} className="header-search-form" style={{ width: '100%', position: 'relative' }}>
           <Search size={18} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
           <input
             type="text"
@@ -190,7 +190,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, unreadCount, on
 
           {/* Notifications Dropdown */}
           {showNotifications && (
-            <div style={{
+            <div className="header-notif-dropdown" style={{
               position: 'absolute',
               right: 0,
               top: '115%',
@@ -283,7 +283,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, unreadCount, on
               {user?.fullName?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U'}
             </div>
 
-            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
+            <div className="header-user-info" style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: '#111827' }}>
                 {user?.fullName || 'User'}
               </div>
@@ -292,7 +292,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, unreadCount, on
               </div>
             </div>
 
-            <ChevronDown size={15} color="#9CA3AF" />
+            <ChevronDown size={15} color="#9CA3AF" className="header-chevron" />
           </button>
 
           {/* User Menu Dropdown */}
@@ -356,6 +356,30 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, unreadCount, on
           )}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .header-user-info {
+            display: none !important;
+          }
+          .header-chevron {
+            display: none !important;
+          }
+          .header-search-form {
+            display: none !important;
+          }
+          .header-notif-dropdown {
+            width: 300px !important;
+            right: -60px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .header-notif-dropdown {
+            width: 280px !important;
+            right: -80px !important;
+          }
+        }
+      `}</style>
     </header>
   );
 };
