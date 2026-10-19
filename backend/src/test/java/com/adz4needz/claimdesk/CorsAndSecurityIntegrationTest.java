@@ -74,6 +74,20 @@ public class CorsAndSecurityIntegrationTest {
     }
 
     @Test
+    @DisplayName("Successful login with seed admin credentials returns HTTP 200 with JWT and CORS headers")
+    void testSuccessfulLoginReturns200AndCorsHeaders() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .header("Origin", VERCEL_PROD_ORIGIN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"admin@company.com\",\"password\":\"Admin@123\"}"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", VERCEL_PROD_ORIGIN))
+                .andExpect(header().string("Access-Control-Allow-Credentials", "true"))
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.email").value("admin@company.com"));
+    }
+
+    @Test
     @DisplayName("Unapproved origin does not receive Access-Control-Allow-Origin")
     void testUnapprovedOriginBlocked() throws Exception {
         mockMvc.perform(options("/api/auth/login")

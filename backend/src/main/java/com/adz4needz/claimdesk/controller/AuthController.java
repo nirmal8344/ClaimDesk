@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = {"https://claim-desk-three.vercel.app", "http://localhost:5173", "http://localhost:3000", "http://localhost"}, allowCredentials = "true")
 public class AuthController {
 
     private final AuthService authService;
