@@ -38,4 +38,4 @@ ENV PORT=10000 \
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost:${PORT:-10000}/api/health || exit 0
 
-ENTRYPOINT ["sh", "-c", "exec java -Djava.security.egd=file:/dev/./urandom -XX:+UseContainerSupport -jar /app/app.jar --server.port=${PORT:-10000} --server.address=0.0.0.0"]
+ENTRYPOINT ["sh", "-c", "exec java -Djava.security.egd=file:/dev/./urandom -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0 -Xss512k -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -jar /app/app.jar --server.port=${PORT:-10000} --server.address=0.0.0.0"]
