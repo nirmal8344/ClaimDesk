@@ -35,6 +35,6 @@ ENV SPRING_PROFILES_ACTIVE=prod \
     FILE_UPLOAD_DIR=/app/uploads
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/auth/login || exit 0
+  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/health || exit 0
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+UseContainerSupport", "-jar", "/app/app.jar"]

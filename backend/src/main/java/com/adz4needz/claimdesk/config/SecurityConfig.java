@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${cors.allowed-origins:http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173}")
+    @Value("${cors.allowed-origins:https://claim-desk-three.vercel.app,http://localhost:5173,http://localhost:3000,http://localhost,http://localhost:80,http://127.0.0.1:5173}")
     private String allowedOrigins;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -55,7 +55,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/test").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/", "/api/health", "/api/auth/login", "/api/auth/register", "/api/auth/test").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**", "/api/settings/**").permitAll()
                 .requestMatchers("/api/categories/**", "/api/settings/**").hasRole("ADMIN")
                 .requestMatchers("/error").permitAll()
@@ -74,14 +75,32 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+        List<String> origins = new java.util.ArrayList<>(
+            Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
+                .map(s -> s.replaceAll("^[\"']|[\"']$", ""))
+                .map(s -> s.replaceAll("/+$", ""))
                 .filter(s -> !s.isEmpty())
-                .toList();
+                .distinct()
+                .toList()
+        );
+
+        if (!origins.contains("https://claim-desk-three.vercel.app")) {
+            origins.add("https://claim-desk-three.vercel.app");
+        }
+
         configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
-        configuration.setExposedHeaders(List.of("Authorization", "Content-Disposition"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "Accept",
+                "X-Requested-With",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"
+        ));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 

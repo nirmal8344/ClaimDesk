@@ -22,20 +22,45 @@ ClaimDesk is an enterprise Insurance Claim Management System built with a Spring
 | `SPRING_DATASOURCE_URL` | JDBC URL for PostgreSQL database | `jdbc:postgresql://localhost:5432/claimdesk_db` |
 | `SPRING_DATASOURCE_USERNAME` | PostgreSQL database username | `postgres` |
 | `SPRING_DATASOURCE_PASSWORD` | PostgreSQL database password | `8344` |
-| `PORT` | Spring Boot HTTP listening port | `8080` |
-| `JWT_SECRET` | 256-bit+ HMAC SHA secret key | `9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b` |
-| `CORS_ALLOWED_ORIGINS` | Comma-separated list of allowed origins | `http://localhost:5173,http://localhost:3000` |
-| `UPLOAD_DIR` | Directory path for document and photo uploads | `./uploads` |
+| `PORT` | Spring Boot HTTP listening port | `8080` (Render binds dynamically) |
+| `JWT_SECRET` | 256-bit+ HMAC SHA secret key | `claimdesk_adz4needz_super_secret_jwt_key_2026_claim_processing_platform_secure_token!` |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated list of allowed origins | `https://claim-desk-three.vercel.app,http://localhost:5173,http://localhost:3000` |
+| `FILE_UPLOAD_DIR` | Directory path for document and photo uploads | `uploads` |
 
-### Frontend Configuration (`frontend/.env`)
+### Frontend Configuration (`frontend/.env` or Vercel Environment Variables)
 
-| Variable | Description | Default (Local Fallback) |
+| Variable | Description | Production Value (Vercel) |
 | :--- | :--- | :--- |
-| `VITE_API_BASE_URL` | Base endpoint URL of backend API | `http://localhost:8080/api` |
+| `VITE_API_BASE_URL` | Base endpoint URL of backend API | `https://claimdesk-fz9r.onrender.com/api` |
 
 ---
 
-## 3. Security Highlights & Controls
+## 3. Render (Backend) & Vercel (Frontend) Production Deployment
+
+### A. Render Backend Setup (Web Service)
+1. **Service Type:** Ensure your Render service is configured as a **Web Service** (not a Static Site).
+2. **Root Directory:** `backend` (if building native Java) or root `/` (if building via Docker).
+3. **Build Command:** `./mvnw clean package -DskipTests`
+4. **Start Command:** `java -jar target/claimdesk-0.0.1-SNAPSHOT.jar`
+5. **Health Check Path:** `/api/health` (returns HTTP 200 `{"status":"UP"}`)
+6. **Required Environment Variables on Render:**
+   - `CORS_ALLOWED_ORIGINS`: `https://claim-desk-three.vercel.app`
+   - `SPRING_DATASOURCE_URL`: `jdbc:postgresql://<neon-host>/claimdesk_db?sslmode=require`
+   - `SPRING_DATASOURCE_USERNAME`: `<neon-user>`
+   - `SPRING_DATASOURCE_PASSWORD`: `<neon-password>`
+   - `JWT_SECRET`: `<secure-256-bit-key>`
+
+### B. Vercel Frontend Setup
+1. **Framework Preset:** Vite
+2. **Root Directory:** `frontend`
+3. **Build Command:** `npm run build`
+4. **Output Directory:** `dist`
+5. **Environment Variable on Vercel:**
+   - `VITE_API_BASE_URL`: `https://claimdesk-fz9r.onrender.com/api`
+
+---
+
+## 4. Security Highlights & Controls
 
 1. **Role-Based Document Ownership:**
    - Document viewing, downloading, and deletion enforce strict role-based access.

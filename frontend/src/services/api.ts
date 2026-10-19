@@ -1,4 +1,5 @@
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || '/api';
+const rawBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
+export const API_BASE_URL = rawBaseUrl ? rawBaseUrl.replace(/\/+$/, '') : '/api';
 
 export function getAuthToken(): string | null {
   return localStorage.getItem('claimdesk_token');
@@ -20,7 +21,8 @@ interface RequestOptions extends RequestInit {
 export async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { params, headers, ...customConfig } = options;
 
-  let url = `${API_BASE_URL}${endpoint}`;
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  let url = `${API_BASE_URL}${cleanEndpoint}`;
   if (params) {
     const query = Object.entries(params)
       .filter(([_, value]) => value !== undefined && value !== null && value !== '')
