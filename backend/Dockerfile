@@ -29,12 +29,12 @@ COPY --from=builder --chown=claimdesk:claimdesk /app/target/*.jar /app/app.jar
 
 USER claimdesk
 
-EXPOSE 8080
+EXPOSE 8080 10000
 
 ENV SPRING_PROFILES_ACTIVE=prod \
     FILE_UPLOAD_DIR=/app/uploads
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/health || exit 0
+  CMD wget --quiet --tries=1 --spider http://localhost:${PORT:-8080}/api/health || exit 0
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-XX:+UseContainerSupport", "-jar", "/app/app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -XX:+UseContainerSupport -Dserver.port=${PORT:-8080} -Dserver.address=0.0.0.0 -jar /app/app.jar"]

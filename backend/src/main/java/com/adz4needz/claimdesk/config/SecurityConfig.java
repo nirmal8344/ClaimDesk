@@ -56,7 +56,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/", "/api/health", "/api/auth/login", "/api/auth/register", "/api/auth/test").permitAll()
+                .requestMatchers("/", "/health", "/api/health", "/api/auth/login", "/api/auth/register", "/api/auth/test").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**", "/api/settings/**").permitAll()
                 .requestMatchers("/api/categories/**", "/api/settings/**").hasRole("ADMIN")
                 .requestMatchers("/error").permitAll()
