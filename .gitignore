@@ -1,0 +1,58 @@
+# ==============================================================================
+# ClaimDesk Root .gitignore
+# ==============================================================================
+
+# Operating System & IDE Files
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/*
+!.vscode/extensions.json
+
+# Environment variables & Secrets (CRITICAL)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+
+# Node & Frontend Build Artifacts
+**/node_modules/
+**/dist/
+**/dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Java & Backend Build Artifacts
+**/target/
+.mvn/wrapper/maven-wrapper.jar
+*.class
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Uploaded Files & User Evidence (CRITICAL: Do not commit uploaded docs/photos)
+**/uploads/
+**/uploads_test/
+!**/uploads/.gitkeep
+
+# Logs & Temporary Files
+**/logs/
+*.log
+scratch/
+tmp/
