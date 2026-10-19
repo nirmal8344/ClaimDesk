@@ -83,23 +83,47 @@ public class CorsAndSecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("Public health endpoint is accessible and returns CORS headers")
+    @DisplayName("Public health endpoint /api/health is accessible and returns HTTP 200 JSON with status and service")
     void testPublicHealthEndpoint() throws Exception {
         mockMvc.perform(get("/api/health")
                         .header("Origin", VERCEL_PROD_ORIGIN))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", VERCEL_PROD_ORIGIN))
-                .andExpect(jsonPath("$.status").value("UP"));
+                .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.service").value("ClaimDesk API"));
     }
 
     @Test
-    @DisplayName("Root endpoint is accessible and returns CORS headers")
+    @DisplayName("Public health endpoint with trailing slash /api/health/ returns HTTP 200 JSON")
+    void testPublicHealthEndpointTrailingSlash() throws Exception {
+        mockMvc.perform(get("/api/health/")
+                        .header("Origin", VERCEL_PROD_ORIGIN))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", VERCEL_PROD_ORIGIN))
+                .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.service").value("ClaimDesk API"));
+    }
+
+    @Test
+    @DisplayName("Health endpoint /health returns HTTP 200 JSON")
+    void testHealthEndpoint() throws Exception {
+        mockMvc.perform(get("/health")
+                        .header("Origin", VERCEL_PROD_ORIGIN))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Access-Control-Allow-Origin", VERCEL_PROD_ORIGIN))
+                .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.service").value("ClaimDesk API"));
+    }
+
+    @Test
+    @DisplayName("Root endpoint / is accessible and returns CORS headers and UP status")
     void testRootEndpoint() throws Exception {
         mockMvc.perform(get("/")
                         .header("Origin", VERCEL_PROD_ORIGIN))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", VERCEL_PROD_ORIGIN))
-                .andExpect(jsonPath("$.status").value("UP"));
+                .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.service").value("ClaimDesk API"));
     }
 
     @Test

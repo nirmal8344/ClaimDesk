@@ -12,7 +12,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class HealthController {
 
-    @GetMapping({"/", "/health", "/api/health"})
+    @GetMapping({"/", "/health", "/health/", "/api/health", "/api/health/"})
     public ResponseEntity<Map<String, Object>> health() {
         return ResponseEntity.ok(Map.of(
                 "status", "UP",
