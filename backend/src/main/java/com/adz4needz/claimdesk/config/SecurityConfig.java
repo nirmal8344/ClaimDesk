@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/officer/**").hasAnyRole("CLAIM_OFFICER", "ADMIN")
                 .requestMatchers("/api/customer/**").hasRole("CUSTOMER")
-                .requestMatchers("/api/reports/**").hasRole("ADMIN")
+                .requestMatchers("/api/reports/**").hasAnyRole("ADMIN", "CLAIM_OFFICER")
                 .anyRequest().authenticated()
             );
 

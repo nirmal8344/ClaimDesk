@@ -6,6 +6,27 @@ export const policyService = {
     return request<Policy[]>('/customer/policies', { params: { status } });
   },
 
+  async getCustomerPolicyById(id: number): Promise<Policy> {
+    return request<Policy>(`/customer/policies/${id}`);
+  },
+
+  async createCustomerPolicy(data: {
+    policyNumber?: string;
+    policyType: string;
+    providerCompany: string;
+    coverageAmount: number;
+    premiumAmount: number;
+    premiumTerm?: string;
+    startDate: string;
+    endDate: string;
+    coverageDescription?: string;
+  }): Promise<Policy> {
+    return request<Policy>('/customer/policies', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
 
   async getAllPoliciesAdmin(params?: { status?: string; search?: string; page?: number; size?: number }): Promise<PageResponse<Policy>> {
     return request<PageResponse<Policy>>('/admin/policies', { params });

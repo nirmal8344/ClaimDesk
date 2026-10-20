@@ -10,8 +10,7 @@ public class CreatePolicyDto {
 
     private Long customerId; // Optional for admin adding for a customer, or defaults to logged-in user
 
-    @NotBlank(message = "Policy number is required")
-    private String policyNumber;
+    private String policyNumber; // Optional, auto-generated if omitted
 
     @NotBlank(message = "Policy type is required")
     private String policyType;

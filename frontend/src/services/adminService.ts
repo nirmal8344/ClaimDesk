@@ -53,8 +53,18 @@ export const adminService = {
     });
   },
 
-  async exportReport(format: 'csv' | 'excel', type: string = 'claims'): Promise<Blob> {
-    const endpoint = `/reports/export/${format}?type=${encodeURIComponent(type)}`;
+  async exportReport(
+    format: 'csv' | 'excel' | 'pdf',
+    type: string = 'claims',
+    params?: { status?: string; startDate?: string; endDate?: string; customerId?: number }
+  ): Promise<Blob> {
+    const query = new URLSearchParams({ type });
+    if (params?.status && params.status !== 'ALL') query.append('status', params.status);
+    if (params?.startDate) query.append('startDate', params.startDate);
+    if (params?.endDate) query.append('endDate', params.endDate);
+    if (params?.customerId) query.append('customerId', params.customerId.toString());
+
+    const endpoint = `/reports/export/${format}?${query.toString()}`;
     return request<Blob>(endpoint);
   }
 };

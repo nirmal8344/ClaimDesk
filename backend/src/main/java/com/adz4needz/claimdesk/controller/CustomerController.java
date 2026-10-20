@@ -43,10 +43,16 @@ public class CustomerController {
         return ResponseEntity.ok(policyService.getPoliciesForCustomerAndStatus(currentUser.getId(), status));
     }
 
+    @GetMapping("/policies/{id}")
+    public ResponseEntity<PolicyDto> getPolicyById(@PathVariable("id") Long policyId,
+                                                   @AuthenticationPrincipal UserPrincipal currentUser) {
+        return ResponseEntity.ok(policyService.getCustomerPolicyById(policyId, currentUser.getId()));
+    }
+
     @PostMapping("/policies")
-    public ResponseEntity<?> addPolicy() {
-        return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN)
-                .body(java.util.Map.of("message", "Policy creation is restricted to authorized administrators."));
+    public ResponseEntity<PolicyDto> addPolicy(@AuthenticationPrincipal UserPrincipal currentUser,
+                                               @Valid @RequestBody CreatePolicyDto dto) {
+        return ResponseEntity.ok(policyService.createPolicyForCustomer(currentUser.getId(), dto));
     }
 
     @GetMapping("/claims")

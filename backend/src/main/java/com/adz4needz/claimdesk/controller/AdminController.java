@@ -135,6 +135,11 @@ public class AdminController {
         return ResponseEntity.ok(policyService.getAllPolicies(status, search, pageRequest));
     }
 
+    @GetMapping("/policies/{id}")
+    public ResponseEntity<PolicyDto> getPolicyById(@PathVariable("id") Long policyId) {
+        return ResponseEntity.ok(policyService.getPolicyById(policyId));
+    }
+
     @PostMapping("/policies")
     public ResponseEntity<PolicyDto> createPolicy(
             @AuthenticationPrincipal UserPrincipal currentUser,
